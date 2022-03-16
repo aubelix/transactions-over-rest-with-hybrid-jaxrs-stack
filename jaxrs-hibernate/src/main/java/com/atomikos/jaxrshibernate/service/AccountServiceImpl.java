@@ -23,26 +23,37 @@ import sample.rs.service.api.HelloService;
 @Transactional
 public class AccountServiceImpl implements HelloService {
 
+
+
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private TestServiceImpl testService;
 
+	@Override
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sayHello(@PathParam("name")  String name) {
 		return "Hello2 " + name + ", Welcome to CXF RS Spring Boot World!!!";
 	}
-	
-	
+
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createAccount(Account account) {
 		Account savedAccount = accountRepository.save(account);
 		System.out.println(savedAccount.getId());
+
+
+		// here we start a new transaction by @Transactional(value = TxType.REQUIRES_NEW)
+		// this will lead to an error in com.atomikos.icatch.imp.ActiveStateHandler.orphansExist()
+		testService.doTest();
+
 		return Response.ok(savedAccount).build();
 	}
-	
+
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

@@ -16,7 +16,7 @@ public class SampleRestClientApplication {
             .web(WebApplicationType.NONE)
             .run(args);
     }
-    
+
     @Autowired
     PaymentService paymentService;
     @Bean
@@ -30,7 +30,7 @@ public class SampleRestClientApplication {
             	paymentService.savePaymentAndAccount("demo1", 10, "unique");
             	System.out.println("-----------------------------------------------------");
             	//will perform a rollback
-            	paymentService.savePaymentAndAccount("demo2", 22, "unique");
+            	//paymentService.savePaymentAndAccount("demo2", 22, "unique");
             }
         };
     }

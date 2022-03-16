@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<atomikos.version>5.0.87-SNAPSHOT</atomikos.version>
+		<atomikos.version>5.0.9</atomikos.version>
 	</properties>
 
 	<dependencies>
