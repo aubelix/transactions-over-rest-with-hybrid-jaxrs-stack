@@ -44,4 +44,37 @@ public class PaymentService {
 			throw new RuntimeException("Simulated error");
 		}
 	}
+	
+	
+	
+	/**
+	 * Testcase for error in ActiveStateHandler.prepare()
+	 * 
+	 * <pre>
+	 *  
+	 * 	if ( allReadOnly ) {
+     *       nextStateHandler = new TerminatedStateHandler ( this );
+     *       getCoordinator ().setStateHandler ( nextStateHandler );
+	 * </pre>
+	 * 
+	 * If readOnly calls are done from Services 1 and Service 2 to  Service 3 we get an error in the prepare phase.
+	 * Service 1 wants to do the prepare and because of the 'allReadOnly' logic in ActiveStateHandler the Coordinator is removed 
+	 * in TransactionServiceImp.removeCoordinator(). When Service 2 wants to do prepare on Service 3, the Coordinator is missing and  
+	 * TransactionServiceImp.getCoordinatorImpForRoot() will not find the coordinator.
+	 */
+	public void testTransitiveReadOnlyCalls() {
+
+    	// Call the readOnly sayHello operation on server 8081
+		Client client = newClient().register(TransactionProvider.class).register(JacksonJsonProvider.class).register(ParticipantsProvider.class).register(TransactionAwareRestClientFilter.class);
+		WebTarget target = client.target("http://localhost:8081/transactions/account");
+		target.path("/test").request().accept(MediaType.TEXT_PLAIN).buildGet().invoke();
+
+		//then call the readOnly sayHello operation on server 8080
+		// sayHello on 8080 will also do a call to sayHello in 8081
+		// this means, sayHello on 8081 ist called twice
+		target = client.target("http://localhost:8080/transactions/account");
+		target.path("/test").request().accept(MediaType.TEXT_PLAIN).buildGet().invoke();
+
+		
+	}
 }

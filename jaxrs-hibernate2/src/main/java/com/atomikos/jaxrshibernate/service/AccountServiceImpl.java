@@ -34,18 +34,11 @@ public class AccountServiceImpl implements HelloService {
 
 	@Autowired
 	private AccountRepository accountRepository;
-	
-	@Override
+
 	@GET 
 	@Path("/{name}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sayHello(@PathParam("name")  String name) {
-
-		// Call the readOnly sayHello operation on server 8081
-		Client client = newClient().register(TransactionProvider.class).register(JacksonJsonProvider.class).register(ParticipantsProvider.class).register(TransactionAwareRestClientFilter.class);
-		WebTarget target = client.target("http://localhost:8081/transactions/account");
-		target.path("/test").request().accept(MediaType.TEXT_PLAIN).buildGet().invoke();
-
 		return "Hello2 " + name + ", Welcome to CXF RS Spring Boot World!!!";
 	}
 	
@@ -54,9 +47,13 @@ public class AccountServiceImpl implements HelloService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createAccount(Account account) {
+		
+		
+		
+		
+		
 		Account savedAccount = accountRepository.save(account);
 		System.out.println(savedAccount.getId());
-		
 		return Response.ok(savedAccount).build();
 	}
 	
