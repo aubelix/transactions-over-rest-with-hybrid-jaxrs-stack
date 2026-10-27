@@ -27,10 +27,10 @@ public class SampleRestClientApplication {
             @Override
             public void run(String... runArgs) throws Exception {
             	//will perform a commit
-            	paymentService.savePaymentAndAccount("demo1", 10, "unique");
+            	paymentService.savePaymentAndAccount("error", 10, "unique");
             	System.out.println("-----------------------------------------------------");
             	//will perform a rollback
-            	paymentService.savePaymentAndAccount("demo2", 22, "unique");
+            	//paymentService.savePaymentAndAccount("demo2", 22, "unique");
             }
         };
     }
